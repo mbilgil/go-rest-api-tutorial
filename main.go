@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 
@@ -57,6 +58,16 @@ func DeletePersonEndpoint(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(people)
 }
 
+func queryParamDisplayHandler(res http.ResponseWriter, req *http.Request) {
+	io.WriteString(res, "query: "+req.FormValue("name"))
+	io.WriteString(res, "\nphone: "+req.FormValue("phone"))
+	println("Enter this in your browser:  http://localhost:9000/example?name=mehmet&phone=533-533")
+	// values := req.URL.Query()
+	// for k, v := range values {
+	// 	fmt.Println(k, " => ", v)
+	// }
+}
+
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	people = append(people, Person{ID: "1", FirstName: "Mehmet", LastName: "Bilgil", Address: &Address{City: "İstanbul", State: "Türkiye"}})
@@ -65,5 +76,7 @@ func main() {
 	router.HandleFunc("/people/{id}", GetPersonEndpoint).Methods("GET")
 	router.HandleFunc("/people/{id}", CreatePersonEndpoint).Methods("POST")
 	router.HandleFunc("/people/{id}", DeletePersonEndpoint).Methods("DELETE")
+	router.HandleFunc("/example", queryParamDisplayHandler).Methods("GET")
+
 	log.Fatal(http.ListenAndServe(":9000", router))
 }
