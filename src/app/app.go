@@ -36,6 +36,8 @@ func (a *App) setRouters() {
 
 	// Routing for handling jwt
 	a.Get("/token", a.handleRequest(key.GetToken))
+	// Routing for handling jwt
+	a.Post("/generate-token", a.handleRequest(key.GenerateJWT))
 
 }
 
