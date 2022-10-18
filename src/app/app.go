@@ -2,6 +2,7 @@ package app
 
 import (
 	"go-rest-api-tutorial/src/example"
+	"go-rest-api-tutorial/src/key"
 	"go-rest-api-tutorial/src/person"
 	"go-rest-api-tutorial/src/university"
 	"log"
@@ -32,6 +33,9 @@ func (a *App) setRouters() {
 
 	// Routing for handling university
 	a.Get("/example", a.handleRequest(example.QueryParamDisplayHandler))
+
+	// Routing for handling jwt
+	a.Get("/token", a.handleRequest(key.GetToken))
 
 }
 
